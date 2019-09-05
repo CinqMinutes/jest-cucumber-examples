@@ -4,10 +4,17 @@ Quelques exemples pour apprendre à piloter ses devs par les comportements en Re
 
 ## Qu'allons nous coder ?
 
-Un outil statistique qui ressence la population par pays.
+Quitte à faire une application d'exemple, autant s'approcher le plus possible de ce que nous pourrions faire dans la réalité.
+Bon, nous n'allons pas coder un magasin en ligne mais, peut-être, un outil de souscription à un service avec abonnement.
 
-Pour se faire, nous allons utiliser une API publique et gratuite : http://api.population.io/
-Nous pourrons donc nous concentrer sur la création web.
+Celà pourrait se résumer en 4 pages web :
+
+1. Sélection du produit et des détails
+1. Information personnelles
+1. Tarification
+1. Confirmation / Validation
+
+Pour la partie design, nous nous baserons le [Google's Material Design](https://material.io/design/introduction/).
 
 ## Stacks techniques
 
