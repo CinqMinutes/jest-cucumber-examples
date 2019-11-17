@@ -25,7 +25,7 @@ Avant de commencer les développements, à proprement parler, commençons par r�
 Déplaçons les fichiers `App.*` dans un répertoire `app` puis créons un fichier `index.ts` dans ce nouveau répertoire :
 
 ```typescript
-export { default } from './App';
+export { default as App } from './App';
 ```
 
 De cette manière, dans le fichier de démarrage n'aura pas à faire
@@ -37,7 +37,7 @@ import App from './app/App';
 mais
 
 ```typescript
-import App from './app';
+import { App } from './app';
 ```
 
 J'admets que ce n'est qu'estétique, mais, lorsque vous aurez des dizaines de répertoires qui contiendrons des sous répertoires, la lecture du code en sera simplfiée.
@@ -106,7 +106,7 @@ Pour Atom, vous pouvez tester l'extention [laguage-gherkin](https://atom.io/pack
 Une fois que votre IDE comprend et colore syntaxiquement vos instructions Gherkin, vous pouvez ajouter [jest-cucumber](https://github.com/bencompton/jest-cucumber) à votre projet :
 
 ```shell
-# yarn add jest-cucumber -D
+
 ```
 
 ### Routing
@@ -125,14 +125,40 @@ Commençons par installer nos dépendances :
 
 Continuons en créant le fichier `router.tsx`, fichier qui permettra de centraliser les routes principales.
 
+Bien sûr, il nous faut commencer par les tests
+`router.spec.tsx`
+
 ```typescript
-import App from './app';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import React from 'react';
+import { MemoryRouter as Router } from 'react-router-dom';
+import { App } from './app';
+import AppRouter from './router';
+import { mount } from 'enzyme';
+
+describe('Routing switch verifications', () => {
+  test('/ => App', () => {
+    const wrapper = mount(
+      <Router initialEntries={['/']}>
+        <AppRouter />
+      </Router>
+    );
+    expect(wrapper.find(App).length).toBe(1);
+  });
+});
+```
+
+`router.tsx`
+
+```typescript
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { App } from './app';
 
 export default () => (
   <Switch>
-    <Route exact path="/" render={() => <App />} />
+    <Route exact path="/">
+      <App />
+    </Route>
     <Redirect to="/" />
   </Switch>
 );
@@ -144,14 +170,14 @@ Pour qu'il soit utilisé, nous devons le référencer comme composant dans `inde
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import Router from './router';
+import AppRouter from './router';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Router />
-  </BrowserRouter>,
+  <Router>
+    <AppRouter />
+  </Router>,
   document.getElementById('root')
 );
 
