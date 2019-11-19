@@ -106,7 +106,7 @@ Pour Atom, vous pouvez tester l'extention [laguage-gherkin](https://atom.io/pack
 Une fois que votre IDE comprend et colore syntaxiquement vos instructions Gherkin, vous pouvez ajouter [jest-cucumber](https://github.com/bencompton/jest-cucumber) à votre projet :
 
 ```shell
-
+# yarn add jest-cucumber
 ```
 
 ### Routing
@@ -212,3 +212,80 @@ serviceWorker.unregister();
 ```
 
 Nous voilà enfin prêts pour commencer le développement des fonctionnalités.
+
+## S'initier au Gherkin
+
+Faisons juste un petit exercice pour nous familiariser avec le Ghrkin et son automatisation.
+
+Aller, imaginons que nous sommes tous très fatigués et que nous avons confondu app et add...
+
+Nous ajoutons donc le fichier `app.feature` dans le répertoire app :
+
+```gherkin
+Feature: Addition
+    Sans même réfléchir, je confonds app et add.
+    Du coup, je spécifie une addition
+
+    Scenario: Ajouter deux nombres
+        Given J'entre 50 dans le calculateur
+        And J'entre 70 dans le calculateur
+        When Je lance l'addition
+        Then J'obtiens 120
+```
+
+Notez bien que :
+
+1. le mot clé `Feature` donne un titre et une description à la fonctionnalité souhaitée (1 `Feature` par fichier feature)
+1. le mot clé `Scenario` désigne un comportement attendu. Il peut y avoir un à plusieurs scenarii par `Feature`
+1. `Given` pose le contexte, les conditions de départ
+1. `When` concrétise l'action qui déclenche le comportement attendu.
+1. `Then` indique le résultat attendu (c'est ici que l'on trouvera le ou les `expect`)
+1. `And` répète juste l'instruction précédente. Dans notre cas, remplacer `And` par `Given` n'aurait aucune incidence.
+
+Pour automatiser ce cas de test, je vais créer un fichier `app.feature.spec.ts` (oui, l'exécution de vos scenarii se fera avec vos TU. Pas besoin d'une commande supplémentaire) :
+
+```typescript
+import { defineFeature, loadFeature } from 'jest-cucumber';
+
+const feature = loadFeature('./src/app/app.feature');
+
+const givenAddNumber = (given, numbers) => {
+  given(/^J'entre (.*) dans le calculateur$/, nombre => {
+    numbers.push(parseInt(nombre));
+  });
+};
+
+defineFeature(feature, test => {
+  test('Ajouter deux nombres', ({ given, when, then }) => {
+    const numbers: Array<number> = [];
+    let somme: number = 0;
+    givenAddNumber(given, numbers);
+    givenAddNumber(given, numbers);
+    when("Je lance l'addition", () => {
+      somme = numbers.reduce((p, n) => p + n);
+    });
+    then(/^J'obtiens (.*)$/, resultat => {
+      expect(somme).toBe(parseInt(resultat));
+    });
+  });
+});
+```
+
+Dans ce code, plusieurs choses à retenir :
+
+- J'ai sorti le `given` dans une méthode pour pouvoir le réutiliser.
+- le loadFeature se base sur le répertoire du `package.json`.
+- Et, surtout, le code est encore dans le test !
+
+Donc, oui, il ne nous reste plus qu'à sortir ce code dans une classe prévue à cet effet `app.pure.ts` (`pure` signifiant qu'elle est totalement indépendante et réutilisable)
+
+```typescript
+class AppNumbers {
+  private nombres: Array<number> = [];
+
+  ajoute = (nombre: number) => this.nombres.push(nombre);
+  somme = () => this.nombres.reduce((p, n) => p + n);
+}
+
+export default AppNumbers;
+```

@@ -1,6 +1,6 @@
 Feature: Addition
     Sans même réfléchir, je confonds app et add.
-    Du cooup, je spécifie une addition
+    Du coup, je spécifie une addition
 
     Scenario: Ajouter deux nombres
         Given J'entre 50 dans le calculateur
