@@ -1,0 +1,235 @@
+{
+  "Feature Spec Addition": {
+    "scope": "typescript",
+    "prefix": "loadFeatureApp",
+    "body": [
+      "import { defineFeature, loadFeature } from 'jest-cucumber';",
+      "",
+      "const feature = loadFeature('./src/app/app.feature');",
+      "",
+      "const addNumber = (given, numbers) => {",
+      "  given(/^J'entre (.*) dans le calculateur$/, nombre => {",
+      "    numbers.push(parseInt(nombre));",
+      "  });",
+      "};",
+      "",
+      "defineFeature(feature, test => {",
+      "  test('Ajouter deux nombres', ({ given, when, then }) => {",
+      "    const numbers: Array<number> = [];",
+      "    let somme: number = 0;",
+      "    addNumber(given, numbers);",
+      "    addNumber(given, numbers);",
+      "    when(\"Je lance l'addition\", () => {",
+      "      somme = numbers.reduce((p, n) => p + n);",
+      "    });",
+      "    then(/^J'obtiens (.*)$/, resultat => {",
+      "      expect(somme).toBe(parseInt(resultat));",
+      "    });",
+      "  });",
+      "});"
+    ]
+  },
+  "Given Pure Spec Addition": {
+    "scope": "typescript",
+    "prefix": "givenAddNumberApp",
+    "body": [
+      "const givenAddNumber = (given, numbers: AppNumbers) => {",
+      "  given(/^J'entre (.*) dans le calculateur$/, nombre => {",
+      "    numbers.ajoute(parseInt(nombre));",
+      "  });",
+      "};"
+    ]
+  },
+  "Pure addition": {
+    "scope": "typescript",
+    "prefix": "addPure",
+    "body": [
+      "class AppNumbers {",
+      "  private nombres: Array<number> = [];",
+      "",
+      "  ajoute = (nombre: number) => this.nombres.push(nombre);",
+      "  somme = () => this.nombres.reduce((p, n) => p + n);",
+      "}",
+      "",
+      "export default AppNumbers;"
+    ]
+  },
+  "Circle Material on App test": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "describeAppMaterialCircle",
+    "body": [
+      "describe('Material UI', () => {",
+      "  test('Doit contenir le MuiThemeProvider', () => {",
+      "    const wrapper = mount(<App />);",
+      "    expect(wrapper.find(MuiThemeProvider).length).toBe(1);",
+      "  });",
+      "",
+      "  test('Doit contenir un cercle de chargement au centre', () => {",
+      "    const wrapper = mount(<App />);",
+      "    expect(wrapper.find('.perfect-middle').length).toBe(1);",
+      "    expect(wrapper.find(CircularProgress).length).toBe(1);",
+      "    expect(wrapper.find(CircularProgress).prop('size')).toBe(180);",
+      "    expect(wrapper.find(CircularProgress).prop('thickness')).toBe(5);",
+      "  });",
+      "});"
+    ]
+  },
+  "Perfect Middle": {
+    "scope": "scss, css",
+    "prefix": ".perfect-middle",
+    "body": [
+      ".perfect-middle {",
+      "  position: fixed;",
+      "  top: 50%;",
+      "  left: 50%;",
+      "  transform: translate(-50%, -50%);",
+      "}"
+    ]
+  },
+  "Perfect Middle App": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "appPerfectMiddle",
+    "body": [
+      "const App: React.FC = () => (",
+      "  <MuiThemeProvider>",
+      "    <div className=\"perfect-middle\">",
+      "      <CircularProgress size={180} thickness={5} />",
+      "    </div>",
+      "  </MuiThemeProvider>",
+      ");"
+    ]
+  },
+  "Feature Meteo": {
+    "scope": "feature",
+    "prefix": "featureMeteo",
+    "body": [
+      "Feature: Météo",
+      "",
+      "  Permet d'afficher la météo",
+      "",
+      "Scenario: Aller sur la page permet de saisir le lieu",
+      "    When Je vais sur la route '/meteo'",
+      "    Then J'obtiens la 'description' météo 'nuageux'"
+    ]
+  },
+
+  "Load Feature Meteo": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "loadFeatureMeteo",
+    "body": [
+      "import React from 'react';",
+      "import { defineFeature, loadFeature } from 'jest-cucumber';",
+      "import AppRouter from '../router';",
+      "import { mount, ReactWrapper } from 'enzyme';",
+      "",
+      "import { MemoryRouter as Router } from 'react-router-dom';",
+      "",
+      "const feature = loadFeature('./src/meteo/meteo.feature');",
+      "",
+      "defineFeature(feature, test => {",
+      "  let wrapper: ReactWrapper;",
+      "  test('Aller sur la page permet de saisir le lieu', ({ when, then }) => {",
+      "    when(/^Je vais sur la route '(.*)'$/, url => {",
+      "      wrapper = mount(",
+      "        <Router initialEntries={[url]}>",
+      "          <AppRouter />",
+      "        </Router>",
+      "      );",
+      "    });",
+      "    then(/^J'obtiens la '(.*)' météo '(.*)'$/, (nom, valeur) => {",
+      "      expect(wrapper.find(`#${nom}`)).toHaveLength(1);",
+      "      expect(wrapper.find(`#${nom}`).text()).toBe(valeur);",
+      "    });",
+      "  });",
+      "});"
+    ]
+  },
+  "Create FC React": {
+    "scope": "typescriptreact",
+    "prefix": "createFC",
+    "body": [
+      "import React from 'react';",
+      "",
+      "const $1: React.FC = () => <div />;",
+      "",
+      "export default $1;"
+    ]
+  },
+  "Route unit test": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "testRoute",
+    "body": [
+      "test('/$1 => $2', () => {",
+      "  const wrapper = mount(",
+      "    <Router initialEntries={['/$1']}>",
+      "      <AppRouter />",
+      "    </Router>",
+      "  );",
+      "  expect(wrapper.find($2).length).toBe(1);",
+      "});"
+    ]
+  },
+  "Add weather description state": {
+    "scope": "typescriptreact",
+    "prefix": "weatherUseState",
+    "body": [
+      "const [description, setDescription] = useState('');",
+      "",
+      "return <span id=\"description\">{description}</span>;"
+    ]
+  },
+  "Add weather fetch": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "weatherUseEffet",
+    "body": [
+      "useEffect(() => {",
+      "  fetch(",
+      "    'https://api.openweathermap.org/data/2.5/weather?q=Lille,france&units=metric&lang=fr&APPID=8842bad529b81b6b7ab08ec713e0b70d'",
+      "  ).then(data => {",
+      "    data.json().then(json => {",
+      "      setDescription(json.weather[0].description);",
+      "    });",
+      "  });",
+      "});"
+    ]
+  },
+  "New weather spec feature": {
+    "scope": "typescriptreact",
+    "prefix": "loadFullFeatureSpec",
+    "body": [
+      "import React from 'react';",
+      "import { defineFeature, loadFeature } from 'jest-cucumber';",
+      "import AppRouter from '../router';",
+      "import { mount, ReactWrapper } from 'enzyme';",
+      "import { MemoryRouter as Router } from 'react-router-dom';",
+      "import { weather } from './__mocks__/sample.weather';",
+      "import { act } from 'react-dom/test-utils';",
+      "",
+      "const feature = loadFeature('./src/meteo/meteo.feature');",
+      "",
+      "defineFeature(feature, test => {",
+      "  let wrapper: ReactWrapper;",
+      "  window.fetch = jest",
+      "    .fn()",
+      "    .mockImplementation(() =>",
+      "      Promise.resolve({ json: () => Promise.resolve(weather.result) })",
+      "    );",
+      "  test('Aller sur la page permet de saisir le lieu', ({ when, then }) => {",
+      "    when(/^Je vais sur la route '(.*)'$/, async url => {",
+      "      await act(async () => {",
+      "        wrapper = await mount(",
+      "          <Router initialEntries={[url]}>",
+      "            <AppRouter />",
+      "          </Router>",
+      "        );",
+      "      });",
+      "    });",
+      "    then(/^J'obtiens la '(.*)' météo '(.*)'$/, (nom, valeur) => {",
+      "      expect(wrapper.find(`#${nom}`)).toHaveLength(1);",
+      "      expect(wrapper.find(`#${nom}`).text()).toBe(valeur);",
+      "    });",
+      "  });",
+      "});"
+    ]
+  }
+}
