@@ -1,20 +1,45 @@
 {
-  // Place your react-app workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
-  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
-  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
-  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
-  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
-  // Placeholders with the same ids are connected.
-  // Example:
-  // "Print to console": {
-  // 	"scope": "javascript,typescript",
-  // 	"prefix": "log",
-  // 	"body": [
-  // 		"console.log('$1');",
-  // 		"$2"
-  // 	],
-  // 	"description": "Log output to console"
-  // }
+  "Feature Spec Addition": {
+    "scope": "typescript",
+    "prefix": "loadFeatureApp",
+    "body": [
+      "import { defineFeature, loadFeature } from 'jest-cucumber';",
+      "",
+      "const feature = loadFeature('./src/app/app.feature');",
+      "",
+      "const addNumber = (given, numbers) => {",
+      "  given(/^J'entre (.*) dans le calculateur$/, nombre => {",
+      "    numbers.push(parseInt(nombre));",
+      "  });",
+      "};",
+      "",
+      "defineFeature(feature, test => {",
+      "  test('Ajouter deux nombres', ({ given, when, then }) => {",
+      "    const numbers: Array<number> = [];",
+      "    let somme: number = 0;",
+      "    addNumber(given, numbers);",
+      "    addNumber(given, numbers);",
+      "    when(\"Je lance l'addition\", () => {",
+      "      somme = numbers.reduce((p, n) => p + n);",
+      "    });",
+      "    then(/^J'obtiens (.*)$/, resultat => {",
+      "      expect(somme).toBe(parseInt(resultat));",
+      "    });",
+      "  });",
+      "});"
+    ]
+  },
+  "Given Pure Spec Addition": {
+    "scope": "typescript",
+    "prefix": "givenAddNumberApp",
+    "body": [
+      "const givenAddNumber = (given, numbers: AppNumbers) => {",
+      "  given(/^J'entre (.*) dans le calculateur$/, nombre => {",
+      "    numbers.ajoute(parseInt(nombre));",
+      "  });",
+      "};"
+    ]
+  },
   "Pure addition": {
     "scope": "typescript",
     "prefix": "addPure",
@@ -83,7 +108,7 @@
       "  Permet d'afficher la météo",
       "",
       "Scenario: Aller sur la page permet de saisir le lieu",
-      "    When Je vais sur la route '/meteo/France/Lille'",
+      "    When Je vais sur la route '/meteo'",
       "    Then J'obtiens la 'description' météo 'nuageux'"
     ]
   },
@@ -116,6 +141,31 @@
       "      expect(wrapper.find(`#${nom}`).text()).toBe(valeur);",
       "    });",
       "  });",
+      "});"
+    ]
+  },
+  "Create FC React": {
+    "scope": "typescriptreact",
+    "prefix": "createFC",
+    "body": [
+      "import React from 'react';",
+      "",
+      "const $1: React.FC = () => <div />;",
+      "",
+      "export default $1;"
+    ]
+  },
+  "Route unit test": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "testRoute",
+    "body": [
+      "test('/$1 => $2', () => {",
+      "  const wrapper = mount(",
+      "    <Router initialEntries={['/$1']}>",
+      "      <AppRouter />",
+      "    </Router>",
+      "  );",
+      "  expect(wrapper.find($2).length).toBe(1);",
       "});"
     ]
   }

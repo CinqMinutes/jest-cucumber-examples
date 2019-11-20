@@ -3,7 +3,7 @@ import AppNumbers from './app.pure';
 
 const feature = loadFeature('./src/app/app.feature');
 
-const givenAddNumber = (given, numbers: AppNumbers) => {
+const addNumber = (given, numbers: AppNumbers) => {
   given(/^J'entre (.*) dans le calculateur$/, nombre => {
     numbers.ajoute(parseInt(nombre));
   });
@@ -13,8 +13,8 @@ defineFeature(feature, test => {
   test('Ajouter deux nombres', ({ given, when, then }) => {
     const numbers: AppNumbers = new AppNumbers();
     let somme: number = 0;
-    givenAddNumber(given, numbers);
-    givenAddNumber(given, numbers);
+    addNumber(given, numbers);
+    addNumber(given, numbers);
     when("Je lance l'addition", () => {
       somme = numbers.somme();
     });

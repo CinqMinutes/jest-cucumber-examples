@@ -249,7 +249,7 @@ import { defineFeature, loadFeature } from 'jest-cucumber';
 
 const feature = loadFeature('./src/app/app.feature');
 
-const givenAddNumber = (given, numbers) => {
+const addNumber = (given, numbers) => {
   given(/^J'entre (.*) dans le calculateur$/, nombre => {
     numbers.push(parseInt(nombre));
   });
@@ -259,8 +259,8 @@ defineFeature(feature, test => {
   test('Ajouter deux nombres', ({ given, when, then }) => {
     const numbers: Array<number> = [];
     let somme: number = 0;
-    givenAddNumber(given, numbers);
-    givenAddNumber(given, numbers);
+    addNumber(given, numbers);
+    addNumber(given, numbers);
     when("Je lance l'addition", () => {
       somme = numbers.reduce((p, n) => p + n);
     });

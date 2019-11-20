@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
 import { App } from './app';
+import { Meteo } from './meteo';
 import AppRouter from './router';
 import { mount } from 'enzyme';
 import { render } from 'react-dom';
@@ -14,6 +15,15 @@ describe('Routing switch verifications', () => {
       </Router>
     );
     expect(wrapper.find(App).length).toBe(1);
+  });
+
+  test('/meteo => Meteo', () => {
+    const wrapper = mount(
+      <Router initialEntries={['/meteo']}>
+        <AppRouter />
+      </Router>
+    );
+    expect(wrapper.find(Meteo).length).toBe(1);
   });
 
   test('Automatic redirect to "/"', () => {
