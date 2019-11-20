@@ -168,5 +168,30 @@
       "  expect(wrapper.find($2).length).toBe(1);",
       "});"
     ]
+  },
+  "Add weather description state": {
+    "scope": "typescriptreact",
+    "prefix": "weatherUseState",
+    "body": [
+      "const [description, setDescription] = useState('');",
+      "",
+      "return <span id=\"description\">{description}</span>;"
+    ]
+  },
+  "Add weather fetch": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "weatherUseEffet",
+    "body": [
+      "useEffect(() => {",
+      "  fetch(",
+      "    'https://api.openweathermap.org/data/2.5/weather?q=Lille,france&units=metric&lang=fr&APPID=8842bad529b81b6b7ab08ec713e0b70d'",
+      "  ).then(data => {",
+      "    data.json().then(json => {",
+      "      console.log(json);",
+      "      setDescription(json.weather[0].description);",
+      "    });",
+      "  });",
+      "});"
+    ]
   }
 }
