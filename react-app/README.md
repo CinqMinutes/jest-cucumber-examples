@@ -106,7 +106,7 @@ Pour Atom, vous pouvez tester l'extention [laguage-gherkin](https://atom.io/pack
 Une fois que votre IDE comprend et colore syntaxiquement vos instructions Gherkin, vous pouvez ajouter [jest-cucumber](https://github.com/bencompton/jest-cucumber) à votre projet :
 
 ```shell
-
+# yarn add jest-cucumber -D
 ```
 
 ### Routing
